@@ -113,19 +113,31 @@ function createCardElement(item, onToggleDetail) {
     attrs: { "data-id": item.id },
   });
 
-  // Bagian media (gambar thumbnail)
+  // Bagian media (gambar / video)
   const mediaWrapper = createElement("div", {
     className: "card__media-wrapper",
   });
 
-  const img = createElement("img", {
-    className: "card__media",
-    attrs: {
-      src: item.path,
-      alt: item.judul || "Koleksi",
-      loading: "lazy",
-    },
-  });
+  const isVideo =
+    typeof item.path === "string" &&
+    item.path.toLowerCase().endsWith(".mp4");
+
+  const mediaElement = isVideo
+    ? createElement("video", {
+        className: "card__media",
+        attrs: {
+          src: item.path,
+          controls: "controls",
+        },
+      })
+    : createElement("img", {
+        className: "card__media",
+        attrs: {
+          src: item.path,
+          alt: item.judul || "Koleksi",
+          loading: "lazy",
+        },
+      });
 
   const overlay = createElement("div", {
     className: "card__media-overlay",
@@ -137,7 +149,7 @@ function createCardElement(item, onToggleDetail) {
   });
 
   overlay.appendChild(overlayLabel);
-  mediaWrapper.appendChild(img);
+  mediaWrapper.appendChild(mediaElement);
   mediaWrapper.appendChild(overlay);
 
   // Bagian teks utama
