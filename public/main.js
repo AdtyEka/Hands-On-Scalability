@@ -76,7 +76,12 @@ async function fetchDetail(id) {
     throw new Error("Gagal memuat detail (" + response.status + ")");
   }
 
-  return response.json();
+  const json = await response.json();
+
+  // Backend mengembalikan bentuk:
+  // { source: "...", data: { id, judul, pencipta, tahun, harga, path } }
+  // Kembalikan langsung objek detailnya agar pemanggil mendapat satu objek karya.
+  return json && json.data ? json.data : json;
 }
 
 /**
