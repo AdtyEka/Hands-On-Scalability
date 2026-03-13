@@ -1,0 +1,388 @@
+/* ====== Reset & base style ====== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: #ffffff;
+  color: #111827;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ====== Layout utama ====== */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+header h1 {
+  font-size: clamp(1.75rem, 2.4vw + 1rem, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+header p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+  max-width: 36rem;
+}
+
+/* ====== State pesan umum ====== */
+.status {
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.status--error {
+  color: #b91c1c;
+  background-color: #fef2f2;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid #fecaca;
+}
+
+/* ====== Grid katalog ====== */
+.catalog-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.catalog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+.catalog-header__title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.catalog-header__meta {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ====== Kartu koleksi ====== */
+.card {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 0.9rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.03);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
+  border-color: #d1d5db;
+}
+
+.card__media-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.card__media {
+  width: 100%;
+  /* Menjaga proporsi gambar tanpa distorsi */
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.card:hover .card__media {
+  transform: scale(1.04);
+}
+
+.card__media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.4)
+  );
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.card:hover .card__media-overlay {
+  opacity: 1;
+}
+
+.card__media-label {
+  position: absolute;
+  left: 0.9rem;
+  bottom: 0.9rem;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background-color: rgba(17, 24, 39, 0.85);
+  color: #f9fafb;
+}
+
+.card__body {
+  padding: 0.9rem 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.card__title-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.card__title {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.card__subtitle {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.card__meta-row {
+  margin-top: 0.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.card__tag {
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+/* ====== Detail koleksi yang di-expand ====== */
+.card__detail {
+  border-top: 1px solid #e5e7eb;
+  padding: 0.7rem 1rem 0.9rem;
+  background-color: #f9fafb;
+  animation: fadeIn 0.18s ease-out;
+}
+
+.card__detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.card__detail-label {
+  color: #6b7280;
+}
+
+.card__detail-value {
+  font-weight: 500;
+  color: #111827;
+}
+
+.card__detail-price {
+  color: #047857;
+  font-weight: 600;
+}
+
+.card__detail-status {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.card__detail-status--error {
+  color: #b91c1c;
+}
+
+/* ====== Skeleton & loader ====== */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #f3f4f6;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(249, 250, 251, 0) 0,
+    rgba(249, 250, 251, 0.8) 50%,
+    rgba(249, 250, 251, 0) 100%
+  );
+  animation: shimmer 1.2s infinite;
+}
+
+.loader-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.loader-inline__dot {
+  width: 0.35rem;
+  height: 0.35rem;
+  border-radius: 999px;
+  background-color: #9ca3af;
+  animation: bounce 0.9s infinite ease-in-out;
+}
+
+.loader-inline__dot:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.loader-inline__dot:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+/* ====== Footer ====== */
+footer {
+  border-top: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.footer__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.9rem 1.25rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.footer__label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #6b7280;
+}
+
+.footer__fortune {
+  font-size: 0.9rem;
+  color: #111827;
+  min-height: 1.5rem;
+}
+
+.footer__meta {
+  font-size: 0.78rem;
+  color: #9ca3af;
+}
+
+/* ====== Responsiveness ====== */
+@media (max-width: 640px) {
+  .page__inner {
+    padding-top: 1.5rem;
+    padding-bottom: 2.25rem;
+  }
+
+  .catalog-grid {
+    gap: 1.1rem;
+  }
+
+  .card__body {
+    padding-inline: 0.8rem;
+  }
+
+  .card__detail {
+    padding-inline: 0.8rem;
+  }
+}
+
+/* ====== Animations ====== */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+

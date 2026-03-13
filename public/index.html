@@ -1,66 +1,85 @@
 <!DOCTYPE html>
-<html>
-<head>
-<title>Katalog Koleksi</title>
-</head>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Katalog Koleksi Seni</title>
+    <!--
+      Halaman frontend sederhana untuk katalog koleksi seni foto/video.
+      Menggunakan:
+      - HTML semantik
+      - CSS Grid & Flexbox untuk layout responsif
+      - Vanilla JavaScript (ES6) dengan async/await dan fetch API
+    -->
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
 
-<body>
+  <body>
+    <div class="page">
+      <main class="page__inner">
+        <header>
+          <h1>Katalog Koleksi Seni</h1>
+          <p>
+            Jelajahi koleksi foto dan video pilihan. Klik judul atau gambar
+            untuk melihat detail setiap karya.
+          </p>
+        </header>
 
-<h1>Katalog Koleksi</h1>
+        <section
+          class="catalog-section"
+          aria-labelledby="catalog-heading"
+        >
+          <div class="catalog-header">
+            <h2
+              id="catalog-heading"
+              class="catalog-header__title"
+            >
+              Koleksi terkini
+            </h2>
+            <p class="catalog-header__meta" id="catalog-meta">
+              <!-- Info jumlah item / status akan diisi via JS -->
+            </p>
+          </div>
 
-<div id="koleksi"></div>
+          <!-- Pesan status global katalog (loading / error) -->
+          <p
+            class="status"
+            id="catalog-status"
+            aria-live="polite"
+          ></p>
 
-<h3>Fortune</h3>
-<div id="fortune"></div>
+          <!-- Grid utama katalog -->
+          <div
+            class="catalog-grid"
+            id="catalog-grid"
+          >
+            <!-- Kartu koleksi akan di-render via JavaScript -->
+          </div>
+        </section>
+      </main>
 
-<script>
+      <footer>
+        <div class="footer__inner">
+          <div>
+            <div class="footer__label">Hari ini kamu mendapatkan</div>
+            <div
+              class="footer__fortune"
+              id="fortune-text"
+              aria-live="polite"
+            >
+              <!-- Fortune message dari API -->
+            </div>
+          </div>
+          <div class="footer__meta">
+            Powered by koleksi internal · Data diambil secara dinamis dari API.
+          </div>
+        </div>
+      </footer>
+    </div>
 
-async function loadKoleksi(){
-
-const res = await fetch('/api/get-koleksi')
-const json = await res.json()
-
-const div = document.getElementById('koleksi')
-
-json.data.forEach(item=>{
-
-div.innerHTML += `
-<div onclick="detail('${item.id}')">
-<img src="${item.path}" width="200">
-<h3>${item.judul}</h3>
-</div>
-`
-
-})
-
-}
-
-async function detail(id){
-
-const res = await fetch(`/api/get-detail?id=${id}`)
-const data = await res.json()
-
-alert(`
-Pencipta: ${data.pencipta}
-Harga: ${data.harga}
-Tahun: ${data.tahun}
-`)
-
-}
-
-async function fortune(){
-
-const res = await fetch('/api/fortune')
-const json = await res.json()
-
-document.getElementById("fortune").innerText = json.fortune
-
-}
-
-loadKoleksi()
-fortune()
-
-</script>
-
-</body>
+    <script src="./main.js" defer></script>
+  </body>
 </html>
