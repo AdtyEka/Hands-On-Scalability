@@ -266,6 +266,36 @@ function createDetailElement(detail, options = {}) {
     return wrapper;
   }
 
+  const isVideoDetail =
+    detail &&
+    typeof detail.path === "string" &&
+    detail.path.toLowerCase().endsWith(".mp4");
+
+  if (isVideoDetail) {
+    const videoWrapper = createElement("div", {
+      className: "card__detail-video-wrapper",
+    });
+
+    const video = createElement("video", {
+      className: "card__detail-video",
+      attrs: {
+        controls: "controls",
+        width: "400",
+      },
+    });
+
+    const source = createElement("source", {
+      attrs: {
+        src: detail.path,
+        type: "video/mp4",
+      },
+    });
+
+    video.appendChild(source);
+    videoWrapper.appendChild(video);
+    wrapper.appendChild(videoWrapper);
+  }
+
   // Baris detail pencipta
   const rowPencipta = createElement("div", {
     className: "card__detail-row",

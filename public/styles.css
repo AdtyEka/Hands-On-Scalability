@@ -225,6 +225,18 @@ header p {
   animation: fadeIn 0.18s ease-out;
 }
 
+.card__detail-video-wrapper {
+  margin-bottom: 0.6rem;
+}
+
+.card__detail-video {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 0.5rem;
+  display: block;
+  outline: none;
+}
+
 .card__detail-row {
   display: flex;
   justify-content: space-between;
