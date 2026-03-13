@@ -1,38 +1,33 @@
-import { createClient } from '@supabase/supabase-js'
-import { createClient as createRedis } from 'redis'
+import { createClient } from "@supabase/supabase-js";
+import { createClient as createRedisClient } from "redis";
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
-)
+  process.env.SUPABASE_ANON_KEY,
+);
 
-const redis = createRedis({
-  url: process.env.REDIS_URL
-})
+const redis = createRedisClient({
+  url: process.env.REDIS_URL,
+});
 
-await redis.connect()
+await redis.connect();
 
 export default async function handler(req, res) {
-
-  const cache = await redis.get("koleksi")
+  const cache = await redis.get("koleksi");
 
   if (cache) {
-    return res.status(200).json({
-      source: "redis cache",
-      data: JSON.parse(cache)
-    })
+    return res.status(200).json(JSON.parse(cache));
   }
 
-  const { data } = await supabase
-    .from('koleksi')
-    .select('*')
+  const { data, error } = await supabase
+    .from("koleksi")
+    .select("id, judul, path");
 
-  await redis.set("koleksi", JSON.stringify(data), {
-    EX: 120
-  })
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
 
-  res.status(200).json({
-    source: "supabase",
-    data
-  })
+  await redis.set("koleksi", JSON.stringify(data), { EX: 60 });
+
+  res.status(200).json(data);
 }
