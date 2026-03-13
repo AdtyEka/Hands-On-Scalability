@@ -13,21 +13,34 @@ const redis = createRedisClient({
 await redis.connect();
 
 export default async function handler(req, res) {
-  const cache = await redis.get("koleksi");
+  try {
+    // Cek cache Redis lebih dulu
+    const cache = await redis.get("koleksi");
 
-  if (cache) {
-    return res.status(200).json(JSON.parse(cache));
+    if (cache) {
+      return res.status(200).json({
+        source: "redis cache",
+        data: JSON.parse(cache),
+      });
+    }
+
+    // Ambil dari Supabase jika belum ada di cache
+    const { data, error } = await supabase
+      .from("koleksi")
+      .select("*");
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    // Simpan ke Redis dengan TTL 60 detik
+    await redis.set("koleksi", JSON.stringify(data), { EX: 60 });
+
+    return res.status(200).json({
+      source: "supabase",
+      data,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
-
-  const { data, error } = await supabase
-    .from("koleksi")
-    .select("id, judul, path");
-
-  if (error) {
-    return res.status(500).json({ error: error.message });
-  }
-
-  await redis.set("koleksi", JSON.stringify(data), { EX: 60 });
-
-  res.status(200).json(data);
 }
