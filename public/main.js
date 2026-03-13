@@ -199,8 +199,13 @@ function createCardElement(item, onToggleDetail) {
   body.appendChild(subtitle);
   body.appendChild(metaRow);
 
-  // Klik pada gambar juga membuka detail
-  mediaWrapper.addEventListener("click", () => onToggleDetail(item.id, card));
+  // Klik pada gambar juga membuka detail (tapi jangan ganggu interaksi video)
+  if (!isVideo) {
+    mediaWrapper.addEventListener("click", () => onToggleDetail(item.id, card));
+  } else {
+    // Overlay bikin kontrol video sulit diklik, jadi matikan untuk video.
+    overlay.style.display = "none";
+  }
 
   card.appendChild(mediaWrapper);
   card.appendChild(body);
