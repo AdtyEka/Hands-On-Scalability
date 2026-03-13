@@ -12,17 +12,18 @@ export const config = {
     const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
   
     return new Response(
-      JSON.stringify({
-        source: "Vercel Edge Real",
+      JSON.stringify({ 
+        source: "Vercel Edge Real", 
         fortune: randomFortune,
         timestamp: new Date().toISOString()
       }),
       {
         status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-store, max-age=0, must-revalidate"
+        headers: { 
+          'Content-Type': 'application/json',
+          'Cache-Control': 'no-store, max-age=0, must-revalidate'
         },
       }
     );
   }
+  

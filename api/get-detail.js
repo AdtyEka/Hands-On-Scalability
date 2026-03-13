@@ -13,27 +13,40 @@ const redis = createRedisClient({
 await redis.connect();
 
 export default async function handler(req, res) {
-  const { id } = req.query;
+  try {
+    const { id } = req.query; // id = uuid dari tabel koleksi
 
-  const cacheKey = `detail:${id}`;
+    const cacheKey = `detail:${id}`;
 
-  const cache = await redis.get(cacheKey);
+    // Cek cache detail
+    const cache = await redis.get(cacheKey);
 
-  if (cache) {
-    return res.status(200).json(JSON.parse(cache));
+    if (cache) {
+      return res.status(200).json({
+        source: "redis cache",
+        data: JSON.parse(cache),
+      });
+    }
+
+    // Ambil 1 baris dari Supabase
+    const { data, error } = await supabase
+      .from("koleksi")
+      .select("id, judul, pencipta, tahun, harga, path")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    // Simpan ke Redis dengan TTL 60 detik
+    await redis.set(cacheKey, JSON.stringify(data), { EX: 60 });
+
+    return res.status(200).json({
+      source: "supabase",
+      data,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
-
-  const { data, error } = await supabase
-    .from("koleksi")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    return res.status(500).json({ error: error.message });
-  }
-
-  await redis.set(cacheKey, JSON.stringify(data), { EX: 60 });
-
-  res.status(200).json(data);
 }

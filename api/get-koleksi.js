@@ -14,7 +14,7 @@ await redis.connect();
 
 export default async function handler(req, res) {
   try {
-    // Cek cache Redis lebih dulu
+    // Cek cache Redis
     const cache = await redis.get("koleksi");
 
     if (cache) {
@@ -24,10 +24,10 @@ export default async function handler(req, res) {
       });
     }
 
-    // Ambil dari Supabase jika belum ada di cache
+    // Ambil dari Supabase
     const { data, error } = await supabase
       .from("koleksi")
-      .select("*");
+      .select("id, judul, pencipta, tahun, harga, path");
 
     if (error) {
       return res.status(500).json({ error: error.message });
